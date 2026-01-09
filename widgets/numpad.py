@@ -1,8 +1,8 @@
 """Number pad widget for digit entry."""
 
 from textual.widget import Widget
-from textual.widgets import Button
-from textual.containers import Grid
+from textual.widgets import Button, Static
+from textual.containers import Container
 from textual.message import Message
 
 
@@ -11,27 +11,26 @@ class Numpad(Widget):
 
     DEFAULT_CSS = """
     Numpad {
-        width: 18;
-        height: 15;
+        width: 20;
+        height: 18;
         border: round #444444;
-        padding: 1;
         background: #16213e;
-    }
-
-    Numpad > Grid {
+        layout: grid;
         grid-size: 3 4;
-        grid-gutter: 1;
-        width: 100%;
-        height: 100%;
+        grid-rows: 3 3 3 3;
+        grid-gutter: 0;
+        padding: 1;
     }
 
     Numpad Button {
         width: 100%;
-        height: 3;
-        min-width: 4;
+        height: 100%;
+        min-height: 3;
         background: #1a1a2e;
         border: tall #444444;
         color: #4ecdc4;
+        content-align: center middle;
+        text-align: center;
     }
 
     Numpad Button:hover {
@@ -85,12 +84,11 @@ class Numpad(Widget):
 
     def compose(self):
         """Create the numpad layout."""
-        with Grid():
-            for digit in range(1, 10):
-                btn = Button(str(digit), id=f"num-{digit}")
-                self.digit_buttons[digit] = btn
-                yield btn
-            yield Button("Clear", id="clear-btn")
+        for digit in range(1, 10):
+            btn = Button(str(digit), id=f"num-{digit}")
+            self.digit_buttons[digit] = btn
+            yield btn
+        yield Button("Clear", id="clear-btn")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """Handle button presses."""

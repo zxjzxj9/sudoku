@@ -1,7 +1,7 @@
 """Game control buttons widget."""
 
 from textual.widget import Widget
-from textual.widgets import Button, Select
+from textual.widgets import Button
 from textual.containers import Horizontal
 from textual.message import Message
 
@@ -15,7 +15,6 @@ class Controls(Widget):
     Controls {
         width: 100%;
         height: 5;
-        padding: 1;
         background: #16213e;
         border: round #444444;
     }
@@ -24,15 +23,19 @@ class Controls(Widget):
         width: 100%;
         height: 100%;
         align: center middle;
+        padding: 0 1;
     }
 
     Controls Button {
         margin: 0 1;
-        min-width: 10;
+        min-width: 8;
+        width: auto;
         height: 3;
+        padding: 0 1;
         background: #1a1a2e;
         border: tall #444444;
         color: #4ecdc4;
+        content-align: center middle;
     }
 
     Controls Button:hover {
@@ -50,26 +53,15 @@ class Controls(Widget):
         color: #4ecdc4;
     }
 
-    Controls Select {
-        margin: 0 1;
-        width: 16;
-        height: 3;
-        background: #1a1a2e;
-        border: tall #444444;
+    Controls #difficulty-btn {
+        min-width: 10;
+        color: #ffd700;
+        border: tall #ffd70060;
     }
 
-    Controls Select:focus {
-        border: tall #4ecdc4;
-    }
-
-    Controls SelectCurrent {
-        background: #1a1a2e;
-        color: #4ecdc4;
-    }
-
-    Controls SelectOverlay {
-        background: #16213e;
-        border: tall #4ecdc4;
+    Controls #difficulty-btn:hover {
+        border: tall #ffd700;
+        background: #3a3a1a;
     }
     """
 
@@ -98,16 +90,18 @@ class Controls(Widget):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.notes_btn: Button | None = None
+        self.difficulty_btn: Button | None = None
+        self.current_difficulty = Difficulty.MEDIUM
+        self._difficulties = list(Difficulty)
 
     def compose(self):
         """Create control buttons."""
         with Horizontal():
-            yield Select(
-                [(d.value.capitalize(), d) for d in Difficulty],
-                value=Difficulty.MEDIUM,
-                id="difficulty-select",
-                allow_blank=False,
+            self.difficulty_btn = Button(
+                self.current_difficulty.value.capitalize(),
+                id="difficulty-btn"
             )
+            yield self.difficulty_btn
             yield Button("New", id="new-btn", variant="primary")
             yield Button("Undo", id="undo-btn")
             yield Button("Redo", id="redo-btn")
@@ -119,11 +113,15 @@ class Controls(Widget):
         """Handle button presses."""
         btn_id = event.button.id
 
-        if btn_id == "new-btn":
-            select = self.query_one("#difficulty-select", Select)
-            difficulty = select.value
-            if difficulty:
-                self.post_message(self.NewGame(difficulty))
+        if btn_id == "difficulty-btn":
+            # Cycle to next difficulty
+            idx = self._difficulties.index(self.current_difficulty)
+            idx = (idx + 1) % len(self._difficulties)
+            self.current_difficulty = self._difficulties[idx]
+            if self.difficulty_btn:
+                self.difficulty_btn.label = self.current_difficulty.value.capitalize()
+        elif btn_id == "new-btn":
+            self.post_message(self.NewGame(self.current_difficulty))
         elif btn_id == "undo-btn":
             self.post_message(self.Undo())
         elif btn_id == "redo-btn":
@@ -142,3 +140,9 @@ class Controls(Widget):
             else:
                 self.notes_btn.label = "Notes: OFF"
                 self.notes_btn.remove_class("notes-on")
+
+    def set_difficulty(self, difficulty: Difficulty) -> None:
+        """Set the current difficulty display."""
+        self.current_difficulty = difficulty
+        if self.difficulty_btn:
+            self.difficulty_btn.label = difficulty.value.capitalize()

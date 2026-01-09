@@ -24,17 +24,19 @@ class SudokuApp(App):
     CSS = """
     Screen {
         background: #1a1a2e;
+        layout: vertical;
     }
 
     #main-container {
         width: 100%;
-        height: 100%;
+        height: 1fr;
         padding: 1;
+        layout: vertical;
     }
 
     #game-area {
         width: 100%;
-        height: auto;
+        height: 1fr;
         align: center top;
     }
 
@@ -51,15 +53,15 @@ class SudokuApp(App):
     }
 
     #side-panel {
-        width: auto;
+        width: 20;
         height: auto;
     }
 
     #controls-row {
         width: 100%;
-        height: auto;
+        height: 5;
         align: center middle;
-        margin-top: 1;
+        dock: bottom;
     }
 
     Header {
