@@ -11,7 +11,7 @@ class Cell(Widget):
 
     DEFAULT_CSS = """
     Cell {
-        width: 5;
+        width: 7;
         height: 3;
         content-align: center middle;
         text-align: center;
@@ -131,9 +131,9 @@ class Cell(Widget):
     def render(self) -> Text:
         """Render the cell content."""
         if self.value != 0:
-            return Text(str(self.value), justify="center")
+            return Text(f" {self.value} ", justify="center")
         elif self.notes:
-            # Render notes in a 3x3 mini-grid format
+            # Render notes in a compact format
             notes_str = self._format_notes()
             return Text(notes_str, style="dim", justify="center")
         else:
@@ -141,10 +141,8 @@ class Cell(Widget):
 
     def _format_notes(self) -> str:
         """Format notes as a compact string."""
-        # For a small cell, just show the digits
         sorted_notes = sorted(self.notes)
-        if len(sorted_notes) <= 4:
-            return "".join(str(n) for n in sorted_notes)
+        if len(sorted_notes) <= 5:
+            return " ".join(str(n) for n in sorted_notes)
         else:
-            # Show first few with ellipsis
-            return "".join(str(n) for n in sorted_notes[:3]) + "+"
+            return " ".join(str(n) for n in sorted_notes[:4]) + "+"

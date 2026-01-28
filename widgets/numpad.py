@@ -11,7 +11,7 @@ class Numpad(Widget):
 
     DEFAULT_CSS = """
     Numpad {
-        width: 20;
+        width: 24;
         height: 18;
         border: round #444444;
         background: #16213e;

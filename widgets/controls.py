@@ -28,10 +28,10 @@ class Controls(Widget):
 
     Controls Button {
         margin: 0 1;
-        min-width: 8;
+        min-width: 10;
         width: auto;
         height: 3;
-        padding: 0 1;
+        padding: 0 2;
         background: #1a1a2e;
         border: tall #444444;
         color: #4ecdc4;
@@ -54,7 +54,7 @@ class Controls(Widget):
     }
 
     Controls #difficulty-btn {
-        min-width: 10;
+        min-width: 12;
         color: #ffd700;
         border: tall #ffd70060;
     }

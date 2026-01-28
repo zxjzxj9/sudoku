@@ -53,7 +53,7 @@ class SudokuApp(App):
     }
 
     #side-panel {
-        width: 20;
+        width: 24;
         height: auto;
     }
 

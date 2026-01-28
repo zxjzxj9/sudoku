@@ -68,8 +68,8 @@ class DigitCount(Widget):
     def render(self) -> Text:
         """Render the digit count."""
         circled = CIRCLED_NUMBERS[self.digit]
-        check = " \u2713" if self.count >= 9 else ""
-        return Text(f"{circled} {self.count}/9{check}")
+        check = "  \u2713" if self.count >= 9 else ""
+        return Text(f" {circled}  {self.count}/9{check}")
 
 
 class Stats(Widget):
@@ -77,7 +77,7 @@ class Stats(Widget):
 
     DEFAULT_CSS = """
     Stats {
-        width: 18;
+        width: 22;
         height: auto;
         background: #16213e;
         border: round #444444;

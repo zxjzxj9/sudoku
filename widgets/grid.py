@@ -13,7 +13,7 @@ class SudokuGrid(Widget):
 
     DEFAULT_CSS = """
     SudokuGrid {
-        width: 47;
+        width: 65;
         height: 29;
         border: round #4ecdc4;
         padding: 0;
